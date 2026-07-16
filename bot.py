@@ -4,6 +4,13 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 
 TOKEN = os.getenv("TOKEN")
 
+# DAGDAG NATIN TO - Para macheck kung may laman yung TOKEN
+if TOKEN is None:
+    print("ERROR: TOKEN not found!")
+    exit(1)
+
+print(f"TOKEN loaded: {TOKEN[:10]}...") # Makikita natin sa logs
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         ["Request a Number", "Check Balance"],
@@ -32,7 +39,7 @@ def main():
     print("Bot is running...")
     app = Application.builder().token(TOKEN).build()
     
-    app.add_handler(CommandHandler("start", start)) # <- lowercase na to
+    app.add_handler(CommandHandler("start", start))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     
     app.run_polling()
