@@ -5,11 +5,15 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 TOKEN = os.getenv("TOKEN")
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [["Request a Number", "Check Balance"],
-                ["Top-up", "Rates"],
-                ["Check Availability"]]
-    await update.message.reply_text("Welcome to OTP Seller!", 
-        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True))
+    keyboard = [
+        ["Request a Number", "Check Balance"],
+        ["Top-up", "Rates"],
+        ["Check Availability"]
+    ]
+    await update.message.reply_text(
+        "Welcome to OTP Seller!",
+        reply_markup=ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+    )
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
@@ -24,7 +28,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif text == "Check Availability":
         await update.message.reply_text("Available: PH, US, IN")
 
-app = Application.builder().token(TOKEN).build()
-app.add_handler(CommandHandler("start", start))
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
-app.run_polling()
+def main():
+    print("Bot is running...")
+    app = Application.builder().token(TOKEN).build()
+    
+    app.add_handler(CommandHandler("start", start)) # <- lowercase na to
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()
